@@ -226,6 +226,7 @@
         transition:
           border-color 0.25s ease,
           box-shadow 0.25s ease;
+        box-sizing: border-box;
       }
 
       .input:focus {
@@ -262,6 +263,138 @@
           );
       }
 
+      .mobile-island-wrap {
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.25rem);
+      }
+
+      .mobile-island {
+        background: color-mix(in srgb, var(--panel-2) 88%, transparent);
+        border: 1px solid var(--line);
+        box-shadow:
+          0 18px 40px rgba(0, 0, 0, 0.24),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .dock-link {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.28rem;
+        border-radius: 999px;
+        padding: 0.7rem 0.35rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-align: center;
+        transition:
+          color 0.25s ease,
+          background 0.25s ease,
+          transform 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+
+      .dock-link:hover {
+        color: var(--text);
+        transform: translateY(-1px);
+      }
+
+      .dock-link svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        flex-shrink: 0;
+      }
+
+      .dock-link span {
+        display: block;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .dock-link.active {
+        color: white;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 8px 20px rgba(217, 119, 6, 0.24);
+      }
+
+      /* ── RESPONSIVE FIXES ── */
+
+      /* Aside: compact horizontal on small tablets (480–767px) */
+      @media (min-width: 480px) and (max-width: 767px) {
+        .aside-inner {
+          display: grid;
+          grid-template-columns: 140px 1fr;
+          gap: 1.25rem;
+          align-items: start;
+        }
+        .aside-photo {
+          width: 100%;
+          max-height: 180px;
+          object-fit: cover;
+        }
+        .aside-right {
+          min-width: 0;
+        }
+        .aside-social-row {
+          display: none;
+        } /* social shown in contact */
+        .aside-cta-row {
+          margin-top: 1rem;
+        }
+      }
+
+      /* Constrain portrait height on xs screens */
+      @media (max-width: 479px) {
+        .aside-photo {
+          max-height: 260px;
+          width: 100%;
+          object-fit: cover;
+          object-position: top;
+        }
+      }
+
+      /* Dock: tighter on very small phones */
+      @media (max-width: 420px) {
+        .dock-link {
+          font-size: 0.62rem;
+          padding: 0.65rem 0.2rem;
+        }
+        .dock-link svg {
+          width: 0.9rem;
+          height: 0.9rem;
+        }
+      }
+
+      /* Extra-small text fixes */
+      @media (max-width: 360px) {
+        .hero-title {
+          font-size: 2rem !important;
+        }
+        .dock-link span {
+          display: none;
+        }
+        .dock-link {
+          padding: 0.8rem 0.4rem;
+        }
+        .dock-link svg {
+          width: 1.2rem;
+          height: 1.2rem;
+        }
+      }
+
+      /* Hide dock on desktop */
+      @media (min-width: 1024px) {
+        #mobileDock {
+          display: none;
+        }
+      }
+
+      /* Reduce motion */
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -279,6 +412,7 @@
       class="pointer-events-none fixed inset-0 -z-10 subtle-grid opacity-60"
     ></div>
 
+    <!-- ── NAV ── -->
     <nav
       class="sticky top-0 z-50 border-b backdrop-blur-md"
       style="
@@ -287,11 +421,11 @@
       "
     >
       <div
-        class="mx-auto max-w-7xl px-5 lg:px-8 xl:px-10 py-4 flex items-center justify-between gap-4"
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-4 flex items-center justify-between gap-3"
       >
-        <a href="#top" class="flex items-center gap-3">
+        <a href="#top" class="flex items-center gap-2 sm:gap-3 min-w-0">
           <span
-            class="grid h-11 w-11 place-items-center rounded-2xl text-white serif text-xl font-bold"
+            class="grid h-9 w-9 sm:h-11 sm:w-11 flex-shrink-0 place-items-center rounded-xl sm:rounded-2xl text-white serif text-lg sm:text-xl font-bold"
             style="
               background: linear-gradient(
                 135deg,
@@ -301,56 +435,77 @@
             "
             >B</span
           >
-          <div>
-            <p class="font-semibold tracking-wide">Babin Bhattarai</p>
-            <p class="text-sm muted">Civil Engineer</p>
+          <div class="min-w-0">
+            <p
+              class="font-semibold tracking-wide text-sm sm:text-base truncate"
+            >
+              Babin Bhattarai
+            </p>
+            <p class="text-xs sm:text-sm muted">Civil Engineer</p>
           </div>
         </a>
 
+        <!-- Desktop nav pills -->
         <ul
           class="hidden lg:flex items-center gap-1 rounded-2xl px-2 py-1 panel"
         >
           <li>
-            <a class="nav-link px-4 py-2 rounded-xl" href="#summary">Summary</a>
+            <a
+              class="nav-link px-3 xl:px-4 py-2 rounded-xl text-sm"
+              href="#summary"
+              >Summary</a
+            >
           </li>
           <li>
-            <a class="nav-link px-4 py-2 rounded-xl" href="#experience"
+            <a
+              class="nav-link px-3 xl:px-4 py-2 rounded-xl text-sm"
+              href="#experience"
               >Experience</a
             >
           </li>
           <li>
-            <a class="nav-link px-4 py-2 rounded-xl" href="#projects"
+            <a
+              class="nav-link px-3 xl:px-4 py-2 rounded-xl text-sm"
+              href="#projects"
               >Projects</a
             >
           </li>
           <li>
-            <a class="nav-link px-4 py-2 rounded-xl" href="#education"
+            <a
+              class="nav-link px-3 xl:px-4 py-2 rounded-xl text-sm"
+              href="#education"
               >Education</a
             >
           </li>
           <li>
-            <a class="nav-link px-4 py-2 rounded-xl" href="#contact">Contact</a>
+            <a
+              class="nav-link px-3 xl:px-4 py-2 rounded-xl text-sm"
+              href="#contact"
+              >Contact</a
+            >
           </li>
         </ul>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <!-- Download CV: visible sm+ on desktop, hidden on mobile (aside has it) -->
           <a
             href="./resume.pdf"
-            class="hidden sm:inline-flex items-center rounded-xl px-4 py-2 panel card-hover"
-            >Download CV</a
+            class="hidden sm:inline-flex lg:inline-flex items-center text-sm rounded-xl px-3 py-2 panel card-hover"
           >
+            Download CV
+          </a>
           <button
             id="themeToggle"
-            class="icon-btn rounded-xl p-2.5"
+            class="icon-btn rounded-xl p-2 sm:p-2.5"
             aria-label="Toggle theme"
-            title="Toggle theme"
+            type="button"
           >
             <svg
               id="sunIcon"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="h-5 w-5"
+              class="h-4 w-4 sm:h-5 sm:w-5"
             >
               <path d="M12 18a6 6 0 100-12 6 6 0 000 12z" />
               <path
@@ -364,7 +519,7 @@
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="h-5 w-5 hidden"
+              class="h-4 w-4 sm:h-5 sm:w-5 hidden"
             >
               <path
                 fill-rule="evenodd"
@@ -373,135 +528,112 @@
               />
             </svg>
           </button>
-          <button
-            id="menuBtn"
-            class="lg:hidden icon-btn rounded-xl p-2.5"
-            aria-label="Open menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="h-6 w-6"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M3.75 5.25A.75.75 0 014.5 4.5h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75zm0 7.5a.75.75 0 01.75-.75h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75zm.75 6.75a.75.75 0 000 1.5h15a.75.75 0 000-1.5h-15z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
         </div>
-      </div>
-
-      <div
-        id="drawer"
-        class="fixed top-0 right-0 bottom-0 w-80 max-w-[92vw] translate-x-full transition-transform duration-300 panel-strong px-7 py-20 lg:hidden"
-      >
-        <button
-          id="drawerClose"
-          class="absolute right-5 top-5 icon-btn rounded-xl p-2"
-          aria-label="Close menu"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            class="h-6 w-6"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M6.225 4.811a.75.75 0 011.06 0L12 9.525l4.715-4.714a.75.75 0 111.06 1.06L13.06 10.586l4.715 4.714a.75.75 0 11-1.06 1.06L12 11.646l-4.715 4.714a.75.75 0 11-1.06-1.06l4.714-4.715-4.714-4.714a.75.75 0 010-1.06z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <ul class="space-y-5 text-base">
-          <li><a class="nav-link block py-1" href="#summary">Summary</a></li>
-          <li>
-            <a class="nav-link block py-1" href="#experience">Experience</a>
-          </li>
-          <li><a class="nav-link block py-1" href="#projects">Projects</a></li>
-          <li>
-            <a class="nav-link block py-1" href="#education">Education</a>
-          </li>
-          <li><a class="nav-link block py-1" href="#contact">Contact</a></li>
-        </ul>
       </div>
     </nav>
 
-    <main id="top" class="px-5 lg:px-8 xl:px-10 pt-10 pb-10">
+    <!-- ── MAIN ── -->
+    <main
+      id="top"
+      class="px-4 sm:px-6 lg:px-8 xl:px-10 pt-6 sm:pt-10 pb-32 lg:pb-10"
+    >
+      <!--
+        FIXED: Main grid now splits at lg (1024px) not xl (1280px).
+        Sidebar width narrows gracefully: 280px at lg, 320px at xl.
+      -->
       <div
-        class="mx-auto max-w-7xl grid gap-8 xl:grid-cols-[340px_minmax(0,1fr)] items-start"
+        class="mx-auto max-w-7xl grid gap-6 sm:gap-8 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[330px_minmax(0,1fr)] items-start"
       >
+        <!-- ── ASIDE ── -->
         <aside
-          class="panel-strong rounded-[1.9rem] p-6 lg:sticky lg:top-28 reveal"
+          class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-6 lg:sticky lg:top-24 reveal"
         >
-          <img
-            src="./images/photo1.png"
-            alt="Babin Bhattarai portrait"
-            class="w-full rounded-[1.45rem] border object-cover"
-            style="border-color: var(--line)"
-          />
+          <!-- Compact horizontal layout on small tablets via .aside-inner -->
+          <div class="aside-inner">
+            <img
+              src="./images/photo1.png"
+              alt="Babin Bhattarai portrait"
+              class="aside-photo w-full rounded-[1.2rem] sm:rounded-[1.45rem] border object-cover"
+              style="border-color: var(--line); max-height: 320px"
+            />
 
-          <div class="mt-6">
-            <p class="section-label">Profile</p>
-            <h1
-              class="serif text-3xl sm:text-4xl font-semibold leading-tight mt-2"
-            >
-              Babin Bhattarai
-            </h1>
-            <p class="mt-2 text-lg muted">Civil Engineer</p>
+            <div class="aside-right">
+              <div class="mt-4 sm:mt-6">
+                <p class="section-label">Profile</p>
+                <h1
+                  class="serif text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-semibold leading-tight mt-2"
+                >
+                  Babin Bhattarai
+                </h1>
+                <p class="mt-1 sm:mt-2 text-base sm:text-lg muted">
+                  Civil Engineer
+                </p>
+              </div>
+
+              <div class="mt-4 sm:mt-6 space-y-2 sm:space-y-3 text-sm">
+                <div
+                  class="flex justify-between gap-4 border-b pb-2 sm:pb-3"
+                  style="border-color: var(--line)"
+                >
+                  <span class="muted flex-shrink-0">Location</span>
+                  <span class="text-right">Bhaktapur, Nepal</span>
+                </div>
+                <div
+                  class="flex justify-between gap-4 border-b pb-2 sm:pb-3"
+                  style="border-color: var(--line)"
+                >
+                  <span class="muted flex-shrink-0">Email</span>
+                  <a
+                    href="mailto:babinbhattarai@gmail.com"
+                    class="hover:underline text-right text-xs sm:text-sm break-all"
+                    >babinbhattarai@gmail.com</a
+                  >
+                </div>
+                <div
+                  class="flex justify-between gap-4 border-b pb-2 sm:pb-3"
+                  style="border-color: var(--line)"
+                >
+                  <span class="muted flex-shrink-0">Education</span>
+                  <span class="text-right text-xs sm:text-sm"
+                    >IOE Thapathali</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between gap-4 border-b pb-2 sm:pb-3"
+                  style="border-color: var(--line)"
+                >
+                  <span class="muted flex-shrink-0">Experience</span>
+                  <span class="text-right text-xs sm:text-sm">ADB Project</span>
+                </div>
+                <div class="flex justify-between gap-4">
+                  <span class="muted flex-shrink-0">Focus</span>
+                  <span class="text-right text-xs sm:text-sm"
+                    >Structures, Hydrology</span
+                  >
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="mt-6 space-y-3 text-sm">
-            <div
-              class="flex justify-between gap-4 border-b pb-3"
-              style="border-color: var(--line)"
+          <div class="mt-5 sm:mt-6 flex flex-wrap gap-2">
+            <span class="chip rounded-full px-3 py-1 text-xs sm:text-sm"
+              >ETABS</span
             >
-              <span class="muted">Location</span>
-              <span>Bhaktapur, Nepal</span>
-            </div>
-            <div
-              class="flex justify-between gap-4 border-b pb-3"
-              style="border-color: var(--line)"
+            <span class="chip rounded-full px-3 py-1 text-xs sm:text-sm"
+              >AutoCAD</span
             >
-              <span class="muted">Email</span>
-              <a href="mailto:babinbhattarai@gmail.com" class="hover:underline"
-                >babinbhattarai@gmail.com</a
-              >
-            </div>
-            <div
-              class="flex justify-between gap-4 border-b pb-3"
-              style="border-color: var(--line)"
+            <span class="chip rounded-full px-3 py-1 text-xs sm:text-sm"
+              >QGIS</span
             >
-              <span class="muted">Education</span>
-              <span class="text-right">IOE Thapathali Campus</span>
-            </div>
-            <div
-              class="flex justify-between gap-4 border-b pb-3"
-              style="border-color: var(--line)"
+            <span class="chip rounded-full px-3 py-1 text-xs sm:text-sm"
+              >Hydrology</span
             >
-              <span class="muted">Experience</span>
-              <span>ADB Project</span>
-            </div>
-            <div class="flex justify-between gap-4">
-              <span class="muted">Focus</span>
-              <span class="text-right"
-                >Structures, Hydrology, Site Supervision</span
-              >
-            </div>
+            <span class="chip rounded-full px-3 py-1 text-xs sm:text-sm"
+              >Surveying</span
+            >
           </div>
 
-          <div class="mt-6 flex flex-wrap gap-2">
-            <span class="chip rounded-full px-3 py-1 text-sm">ETABS</span>
-            <span class="chip rounded-full px-3 py-1 text-sm">AutoCAD</span>
-            <span class="chip rounded-full px-3 py-1 text-sm">QGIS</span>
-            <span class="chip rounded-full px-3 py-1 text-sm">Hydrology</span>
-            <span class="chip rounded-full px-3 py-1 text-sm">Surveying</span>
-          </div>
-
-          <div class="mt-7">
+          <div class="aside-social-row mt-5 sm:mt-7">
             <p class="section-label">Social</p>
             <div class="mt-3 flex flex-wrap gap-2">
               <a
@@ -528,34 +660,42 @@
             </div>
           </div>
 
-          <div class="mt-7 grid gap-3">
+          <div class="aside-cta-row mt-5 sm:mt-7 grid gap-3">
             <a
               href="./resume.pdf"
-              class="rounded-xl px-4 py-3 text-center panel card-hover"
+              class="rounded-xl px-4 py-3 text-center panel card-hover text-sm sm:text-base"
               >Download Resume</a
             >
             <a
               href="#contact"
-              class="rounded-xl px-4 py-3 text-center accent-btn"
+              class="rounded-xl px-4 py-3 text-center accent-btn text-sm sm:text-base"
               >Contact Now</a
             >
           </div>
         </aside>
 
-        <div class="space-y-8">
+        <!-- ── CONTENT ── -->
+        <div class="space-y-6 sm:space-y-8 min-w-0">
+          <!-- Summary -->
           <section
             id="summary"
-            class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal"
+            class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
           >
             <p class="section-label">Professional Summary</p>
-            <div class="mt-4 grid gap-8 lg:grid-cols-[1.15fr_.85fr]">
+            <!--
+              FIXED: Summary grid now stacks on mobile/tablet, side-by-side at lg+.
+              Hero title scales: 2.5xl on xs → 4xl on sm → 5xl on lg.
+            -->
+            <div class="mt-4 grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
               <div>
                 <h2
-                  class="serif text-4xl sm:text-5xl font-semibold leading-tight"
+                  class="hero-title serif text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-semibold leading-tight"
                 >
                   Civil Engineer.
                 </h2>
-                <p class="mt-5 text-lg leading-8 muted max-w-3xl">
+                <p
+                  class="mt-4 sm:mt-5 text-base sm:text-lg leading-7 sm:leading-8 muted"
+                >
                   Civil Engineer with hands-on experience in infrastructure
                   projects under ADB (Asian Development Bank). Skilled in site
                   supervision, hydrology, structural understanding, and
@@ -565,17 +705,24 @@
                 </p>
               </div>
 
-              <div class="grid gap-4">
-                <div class="rounded-2xl p-5 panel card-hover">
+              <!-- Stats cards: horizontal row on mobile, stack on sm, side-by-side on lg -->
+              <div
+                class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4"
+              >
+                <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
                   <p class="section-label">Current Role</p>
-                  <p class="mt-3 text-sm leading-7 muted">
+                  <p
+                    class="mt-2 sm:mt-3 text-xs sm:text-sm leading-6 sm:leading-7 muted"
+                  >
                     Working on ADB project-related engineering responsibilities
                     with attention to quality, coordination, and execution.
                   </p>
                 </div>
-                <div class="rounded-2xl p-5 panel card-hover">
+                <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
                   <p class="section-label">Working Style</p>
-                  <p class="mt-3 text-sm leading-7 muted">
+                  <p
+                    class="mt-2 sm:mt-3 text-xs sm:text-sm leading-6 sm:leading-7 muted"
+                  >
                     Clear documentation, practical site judgment,
                     detail-oriented supervision, and resilient design thinking.
                   </p>
@@ -584,35 +731,45 @@
             </div>
           </section>
 
-          <section class="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
+          <!-- Experience + Skills side-by-side -->
+          <!--
+            FIXED: This two-column grid now kicks in at md (768px), not lg.
+            On small phones it fully stacks.
+          -->
+          <section class="grid gap-6 sm:gap-8 md:grid-cols-[1.1fr_.9fr]">
+            <!-- Experience -->
             <div
               id="experience"
-              class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal"
+              class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
             >
               <p class="section-label">Experience</p>
-              <h2 class="serif text-3xl font-semibold mt-2 section-title">
+              <h2
+                class="serif text-2xl sm:text-3xl font-semibold mt-2 section-title"
+              >
                 Professional Experience
               </h2>
 
-              <div class="relative timeline mt-10 space-y-8">
-                <article class="relative pl-9">
+              <div
+                class="relative timeline mt-8 sm:mt-10 space-y-6 sm:space-y-8"
+              >
+                <article class="relative pl-8 sm:pl-9">
                   <span
                     class="timeline-dot absolute left-0 top-2 h-4 w-4 rounded-full"
                   ></span>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <div
-                      class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"
-                    >
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <div class="flex flex-col gap-1">
                       <div>
-                        <h3 class="text-xl font-semibold">Civil Engineer</h3>
-                        <p class="muted">
+                        <h3 class="text-lg sm:text-xl font-semibold">
+                          Civil Engineer
+                        </h3>
+                        <p class="muted text-sm">
                           ADB Project (Asian Development Bank)
                         </p>
                       </div>
-                      <p class="text-sm muted">2024 – Present</p>
+                      <p class="text-xs sm:text-sm muted">2024 – Present</p>
                     </div>
                     <ul
-                      class="mt-4 space-y-2 text-sm leading-7 muted list-disc pl-5"
+                      class="mt-3 sm:mt-4 space-y-2 text-xs sm:text-sm leading-6 sm:leading-7 muted list-disc pl-5"
                     >
                       <li>
                         Working on infrastructure development projects under ADB
@@ -634,26 +791,24 @@
                   </div>
                 </article>
 
-                <article class="relative pl-9">
+                <article class="relative pl-8 sm:pl-9">
                   <span
                     class="timeline-dot absolute left-0 top-2 h-4 w-4 rounded-full"
                   ></span>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <div
-                      class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"
-                    >
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <div class="flex flex-col gap-1">
                       <div>
-                        <h3 class="text-xl font-semibold">
+                        <h3 class="text-lg sm:text-xl font-semibold">
                           Engineering Intern
                         </h3>
-                        <p class="muted">
+                        <p class="muted text-sm">
                           ADB Project (Asian Development Bank)
                         </p>
                       </div>
-                      <p class="text-sm muted">3 Months</p>
+                      <p class="text-xs sm:text-sm muted">3 Months</p>
                     </div>
                     <ul
-                      class="mt-4 space-y-2 text-sm leading-7 muted list-disc pl-5"
+                      class="mt-3 sm:mt-4 space-y-2 text-xs sm:text-sm leading-6 sm:leading-7 muted list-disc pl-5"
                     >
                       <li>
                         Assisted in site supervision, documentation, and
@@ -671,22 +826,22 @@
                   </div>
                 </article>
 
-                <article class="relative pl-9">
+                <article class="relative pl-8 sm:pl-9">
                   <span
                     class="timeline-dot absolute left-0 top-2 h-4 w-4 rounded-full"
                   ></span>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <div
-                      class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"
-                    >
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <div class="flex flex-col gap-1">
                       <div>
-                        <h3 class="text-xl font-semibold">Site Engineer</h3>
-                        <p class="muted">Construction / Field Role</p>
+                        <h3 class="text-lg sm:text-xl font-semibold">
+                          Site Engineer
+                        </h3>
+                        <p class="muted text-sm">Construction / Field Role</p>
                       </div>
-                      <p class="text-sm muted">Earlier Experience</p>
+                      <p class="text-xs sm:text-sm muted">Earlier Experience</p>
                     </div>
                     <ul
-                      class="mt-4 space-y-2 text-sm leading-7 muted list-disc pl-5"
+                      class="mt-3 sm:mt-4 space-y-2 text-xs sm:text-sm leading-6 sm:leading-7 muted list-disc pl-5"
                     >
                       <li>
                         Supported site activities, work quality checks, safety
@@ -702,99 +857,128 @@
               </div>
             </div>
 
-            <div class="space-y-8">
-              <section class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal">
+            <!-- Skills + Education column -->
+            <div class="space-y-6 sm:space-y-8 min-w-0">
+              <!-- Technical Competencies -->
+              <section
+                class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
+              >
                 <p class="section-label">Core Expertise</p>
-                <h2 class="serif text-3xl font-semibold mt-2 section-title">
+                <h2
+                  class="serif text-2xl sm:text-3xl font-semibold mt-2 section-title"
+                >
                   Technical Competencies
                 </h2>
 
-                <div class="mt-8 grid sm:grid-cols-2 gap-4">
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <h3 class="font-semibold">Structural Assessment</h3>
-                    <p class="mt-2 text-sm muted leading-7">
+                <!--
+                  FIXED: 2-col grid on xs too, not hidden until sm.
+                  On very small phones (< 380px) stays 1 col via min-w.
+                -->
+                <div
+                  class="mt-6 sm:mt-8 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-4"
+                >
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <h3 class="font-semibold text-sm sm:text-base">
+                      Structural Assessment
+                    </h3>
+                    <p
+                      class="mt-2 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       Review of structural behavior, safety needs, and practical
                       strengthening considerations.
                     </p>
                   </div>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <h3 class="font-semibold">Earthquake-Resistant Design</h3>
-                    <p class="mt-2 text-sm muted leading-7">
-                      Context-aware engineering solutions for resilient
-                      buildings and safer construction.
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <h3 class="font-semibold text-sm sm:text-base">
+                      Earthquake-Resistant Design
+                    </h3>
+                    <p
+                      class="mt-2 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
+                      Context-aware engineering for resilient buildings and
+                      safer construction.
                     </p>
                   </div>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <h3 class="font-semibold">Hydrology & Drainage</h3>
-                    <p class="mt-2 text-sm muted leading-7">
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <h3 class="font-semibold text-sm sm:text-base">
+                      Hydrology & Drainage
+                    </h3>
+                    <p
+                      class="mt-2 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       Drainage planning, water flow understanding, and
-                      flood-risk-aware infrastructure thinking.
+                      flood-risk-aware infrastructure.
                     </p>
                   </div>
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <h3 class="font-semibold">Site Supervision</h3>
-                    <p class="mt-2 text-sm muted leading-7">
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <h3 class="font-semibold text-sm sm:text-base">
+                      Site Supervision
+                    </h3>
+                    <p
+                      class="mt-2 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       Quality monitoring, field coordination, documentation, and
-                      practical execution oversight.
+                      execution oversight.
                     </p>
                   </div>
                 </div>
               </section>
 
+              <!-- Education -->
               <section
                 id="education"
-                class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal"
+                class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
               >
                 <p class="section-label">Education</p>
-                <h2 class="serif text-3xl font-semibold mt-2 section-title">
+                <h2
+                  class="serif text-2xl sm:text-3xl font-semibold mt-2 section-title"
+                >
                   Academic Background
                 </h2>
 
-                <div class="mt-8 space-y-4">
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <div
-                      class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"
-                    >
-                      <div>
-                        <h3 class="font-semibold text-lg">
-                          BE in Civil Engineering
-                        </h3>
-                        <p class="muted">
-                          Thapathali Campus, IOE (Tribhuvan University)
-                        </p>
-                      </div>
-                      <p class="text-sm muted">Bachelor’s</p>
+                <div class="mt-6 sm:mt-8 space-y-3 sm:space-y-4">
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <div class="flex flex-col gap-1">
+                      <h3 class="font-semibold text-base sm:text-lg">
+                        BE in Civil Engineering
+                      </h3>
+                      <p class="muted text-xs sm:text-sm">
+                        Thapathali Campus, IOE (Tribhuvan University)
+                      </p>
                     </div>
-                    <p class="mt-3 text-sm muted leading-7">
+                    <p
+                      class="mt-2 sm:mt-3 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       Studied civil engineering with focus on structural
                       engineering, hydrology, construction materials, and
                       earthquake-resistant design.
                     </p>
                   </div>
 
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <div
-                      class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between"
-                    >
-                      <div>
-                        <h3 class="font-semibold text-lg">
-                          Higher Secondary Education (+2 Science)
-                        </h3>
-                        <p class="muted">Kathmandu Model College</p>
-                      </div>
-                      <p class="text-sm muted">Science Stream</p>
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <div class="flex flex-col gap-1">
+                      <h3 class="font-semibold text-base sm:text-lg">
+                        Higher Secondary Education (+2 Science)
+                      </h3>
+                      <p class="muted text-xs sm:text-sm">
+                        Kathmandu Model College
+                      </p>
                     </div>
-                    <p class="mt-3 text-sm muted leading-7">
+                    <p
+                      class="mt-2 sm:mt-3 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       Built strong fundamentals in physics, mathematics, and
                       analytical problem-solving.
                     </p>
                   </div>
 
-                  <div class="rounded-2xl p-5 panel card-hover">
-                    <h3 class="font-semibold text-lg">
+                  <div class="rounded-2xl p-4 sm:p-5 panel card-hover">
+                    <h3 class="font-semibold text-base sm:text-lg">
                       Technical Skills & Training
                     </h3>
-                    <p class="mt-2 text-sm muted leading-7">
+                    <p
+                      class="mt-2 text-xs sm:text-sm muted leading-6 sm:leading-7"
+                    >
                       AutoCAD, ETABS, QGIS, surveying, documentation, and
                       field-oriented engineering workflows.
                     </p>
@@ -804,43 +988,54 @@
             </div>
           </section>
 
+          <!-- Projects -->
           <section
             id="projects"
-            class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal"
+            class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
           >
             <p class="section-label">Selected Projects</p>
-            <h2 class="serif text-3xl font-semibold mt-2 section-title">
+            <h2
+              class="serif text-2xl sm:text-3xl font-semibold mt-2 section-title"
+            >
               Project Highlights
             </h2>
 
-            <div class="mt-8 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-              <article class="rounded-2xl p-6 panel card-hover">
-                <p class="text-sm muted">Infrastructure</p>
-                <h3 class="mt-2 text-xl font-semibold">ADB Project Work</h3>
-                <p class="mt-3 text-sm muted leading-7">
+            <!--
+              FIXED: 1 col on xs, 2 col on sm, 3 col on xl.
+              Previously 1→2→3 was md→xl which skipped sm entirely.
+            -->
+            <div
+              class="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"
+            >
+              <article class="rounded-2xl p-5 sm:p-6 panel card-hover">
+                <p class="text-xs sm:text-sm muted">Infrastructure</p>
+                <h3 class="mt-2 text-lg sm:text-xl font-semibold">
+                  ADB Project Work
+                </h3>
+                <p class="mt-3 text-xs sm:text-sm muted leading-6 sm:leading-7">
                   Supported project execution, quality observation,
                   coordination, and practical implementation in
                   infrastructure-focused work environments.
                 </p>
               </article>
 
-              <article class="rounded-2xl p-6 panel card-hover">
-                <p class="text-sm muted">Housing Resilience</p>
-                <h3 class="mt-2 text-xl font-semibold">
+              <article class="rounded-2xl p-5 sm:p-6 panel card-hover">
+                <p class="text-xs sm:text-sm muted">Housing Resilience</p>
+                <h3 class="mt-2 text-lg sm:text-xl font-semibold">
                   Earthquake-Resistant Housing
                 </h3>
-                <p class="mt-3 text-sm muted leading-7">
+                <p class="mt-3 text-xs sm:text-sm muted leading-6 sm:leading-7">
                   Low-cost structural thinking and practical detailing intended
                   to support safer housing construction in Nepal.
                 </p>
               </article>
 
-              <article class="rounded-2xl p-6 panel card-hover">
-                <p class="text-sm muted">Drainage Planning</p>
-                <h3 class="mt-2 text-xl font-semibold">
+              <article class="rounded-2xl p-5 sm:p-6 panel card-hover">
+                <p class="text-xs sm:text-sm muted">Drainage Planning</p>
+                <h3 class="mt-2 text-lg sm:text-xl font-semibold">
                   Hydrology & Drainage Focus
                 </h3>
-                <p class="mt-3 text-sm muted leading-7">
+                <p class="mt-3 text-xs sm:text-sm muted leading-6 sm:leading-7">
                   Applied hydrology-oriented understanding for drainage
                   awareness, site conditions, and resilient planning approaches.
                 </p>
@@ -848,19 +1043,26 @@
             </div>
           </section>
 
+          <!-- Contact -->
           <section
             id="contact"
-            class="panel-strong rounded-[1.9rem] p-7 sm:p-9 reveal"
+            class="panel-strong rounded-[1.6rem] sm:rounded-[1.9rem] p-5 sm:p-7 lg:p-9 reveal"
           >
             <p class="section-label">Contact</p>
-            <h2 class="serif text-3xl font-semibold mt-2 section-title">
-              Let’s Connect
+            <h2
+              class="serif text-2xl sm:text-3xl font-semibold mt-2 section-title"
+            >
+              Let's Connect
             </h2>
 
-            <div class="mt-8 grid lg:grid-cols-[.95fr_1.05fr] gap-6">
-              <div class="rounded-2xl p-6 panel">
-                <h3 class="text-xl font-semibold">Direct Contact</h3>
-                <p class="mt-3 muted leading-7">
+            <!--
+              FIXED: Contact grid stacks on mobile, side-by-side at md.
+              Form inputs have box-sizing fix so they don't overflow.
+            -->
+            <div class="mt-6 sm:mt-8 grid md:grid-cols-2 gap-5 sm:gap-6">
+              <div class="rounded-2xl p-5 sm:p-6 panel">
+                <h3 class="text-lg sm:text-xl font-semibold">Direct Contact</h3>
+                <p class="mt-3 muted leading-7 text-sm sm:text-base">
                   For consulting inquiries, collaborations, or
                   engineering-related opportunities, feel free to reach out by
                   email or through social platforms.
@@ -869,7 +1071,7 @@
                 <div class="mt-5 space-y-3 text-sm">
                   <a
                     href="mailto:babinbhattarai@gmail.com"
-                    class="block hover:underline"
+                    class="block hover:underline break-all"
                     >babinbhattarai@gmail.com</a
                   >
                   <div class="flex flex-wrap gap-2 pt-2">
@@ -899,7 +1101,7 @@
               </div>
 
               <form
-                class="rounded-2xl p-6 panel grid gap-4"
+                class="rounded-2xl p-5 sm:p-6 panel grid gap-4"
                 onsubmit="
                   event.preventDefault();
                   alert('Thanks! Your message has been noted.');
@@ -916,7 +1118,6 @@
                     class="input mt-1.5"
                   />
                 </div>
-
                 <div>
                   <label class="text-sm muted" for="email">Email</label>
                   <input
@@ -928,22 +1129,20 @@
                     class="input mt-1.5"
                   />
                 </div>
-
                 <div>
                   <label class="text-sm muted" for="message">Message</label>
                   <textarea
                     id="message"
                     name="message"
-                    rows="5"
+                    rows="4"
                     required
                     placeholder="Tell me about your project..."
                     class="input mt-1.5"
                   ></textarea>
                 </div>
-
                 <button
                   type="submit"
-                  class="rounded-xl px-5 py-3 text-left accent-btn"
+                  class="rounded-xl px-5 py-3 text-left accent-btn text-sm sm:text-base"
                 >
                   Send Message
                 </button>
@@ -954,47 +1153,48 @@
       </div>
     </main>
 
-    <footer class="px-5 lg:px-8 xl:px-10 pb-10">
+    <!-- ── FOOTER ── -->
+    <footer class="px-4 sm:px-6 lg:px-8 xl:px-10 pb-8 sm:pb-10">
       <div
-        class="mx-auto max-w-7xl rounded-[1.7rem] px-6 py-6 panel-strong reveal active"
+        class="mx-auto max-w-7xl rounded-[1.4rem] sm:rounded-[1.7rem] px-5 sm:px-6 py-5 sm:py-6 panel-strong reveal active"
       >
         <div
-          class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
             <p class="font-semibold">Babin Bhattarai</p>
             <p class="text-sm muted mt-1">Civil Engineer • Bhaktapur, Nepal</p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3 text-sm">
             <a
               href="https://www.facebook.com/babin.bhattarai.9#"
               target="_blank"
               rel="noopener noreferrer"
-              class="social-link text-sm"
+              class="social-link"
               >Facebook</a
             >
             <a
               href="https://www.instagram.com/babin_bhattarai/"
               target="_blank"
               rel="noopener noreferrer"
-              class="social-link text-sm"
+              class="social-link"
               >Instagram</a
             >
             <a
               href="https://x.com/"
               target="_blank"
               rel="noopener noreferrer"
-              class="social-link text-sm"
+              class="social-link"
               >X</a
             >
             <span class="hidden sm:inline muted">•</span>
-            <a href="#top" class="social-link text-sm">Back to top</a>
+            <a href="#top" class="social-link">Back to top</a>
           </div>
         </div>
 
         <div
-          class="mt-4 pt-4 text-sm muted border-t"
+          class="mt-4 pt-4 text-xs sm:text-sm muted border-t"
           style="border-color: var(--line)"
         >
           © <span id="year"></span> Babin Bhattarai. All rights reserved.
@@ -1002,28 +1202,85 @@
       </div>
     </footer>
 
+    <!-- ── MOBILE DOCK ── -->
+    <nav
+      id="mobileDock"
+      class="mobile-island-wrap fixed bottom-3 sm:bottom-4 left-1/2 z-50 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2rem)] max-w-md -translate-x-1/2 lg:hidden"
+      aria-label="Mobile navigation"
+    >
+      <div
+        class="mobile-island rounded-full px-1.5 sm:px-2 py-1.5 sm:py-2 flex items-center justify-between gap-0.5 sm:gap-1"
+      >
+        <a href="#summary" class="dock-link active" data-target="summary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M3.75 5.25A1.5 1.5 0 015.25 3.75h13.5a1.5 1.5 0 011.5 1.5v13.5a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V5.25z"
+            />
+          </svg>
+          <span>Summary</span>
+        </a>
+        <a href="#experience" class="dock-link" data-target="experience">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M10.5 3a1.5 1.5 0 00-1.5 1.5V6H7.5A2.25 2.25 0 005.25 8.25v9A2.25 2.25 0 007.5 19.5h9A2.25 2.25 0 0018.75 17.25v-9A2.25 2.25 0 0016.5 6H15V4.5A1.5 1.5 0 0013.5 3h-3zm0 3V4.5h3V6h-3z"
+            />
+          </svg>
+          <span>Experience</span>
+        </a>
+        <a href="#projects" class="dock-link" data-target="projects">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M4.5 4.5h6v6h-6v-6zm9 0h6v6h-6v-6zm-9 9h6v6h-6v-6zm9 0h6v6h-6v-6z"
+            />
+          </svg>
+          <span>Projects</span>
+        </a>
+        <a href="#education" class="dock-link" data-target="education">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M12 3L2.25 8.25 12 13.5l7.5-4.038v5.288h1.5V8.25L12 3zm-6.75 8.55v3.2c0 1.952 3.024 3.75 6.75 3.75s6.75-1.798 6.75-3.75v-3.2L12 15.3l-6.75-3.75z"
+            />
+          </svg>
+          <span>Education</span>
+        </a>
+        <a href="#contact" class="dock-link" data-target="contact">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M1.5 4.875A2.625 2.625 0 014.125 2.25h15.75A2.625 2.625 0 0122.5 4.875v14.25a2.625 2.625 0 01-2.625 2.625H4.125A2.625 2.625 0 011.5 19.125V4.875zm2.77-.562a1.125 1.125 0 00-.395.865v.164l8.125 5.417 8.125-5.417v-.164a1.125 1.125 0 00-1.125-1.125H4.125c-.208 0-.41.058-.585.166z"
+            />
+            <path
+              d="M20.25 7.148l-7.834 5.222a.75.75 0 01-.832 0L3.75 7.148v11.977c0 .621.504 1.125 1.125 1.125h14.25c.621 0 1.125-.504 1.125-1.125V7.148z"
+            />
+          </svg>
+          <span>Contact</span>
+        </a>
+      </div>
+    </nav>
+
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      const drawer = document.getElementById("drawer");
-      const menuBtn = document.getElementById("menuBtn");
-      const drawerClose = document.getElementById("drawerClose");
-      const drawerLinks = drawer.querySelectorAll("a");
-
-      function openDrawer() {
-        drawer.classList.remove("translate-x-full");
-      }
-
-      function closeDrawer() {
-        drawer.classList.add("translate-x-full");
-      }
-
-      menuBtn?.addEventListener("click", openDrawer);
-      drawerClose?.addEventListener("click", closeDrawer);
-      drawerLinks.forEach((link) =>
-        link.addEventListener("click", closeDrawer),
-      );
-
+      // ── Theme ──
       const themeToggle = document.getElementById("themeToggle");
       const sunIcon = document.getElementById("sunIcon");
       const moonIcon = document.getElementById("moonIcon");
@@ -1036,24 +1293,71 @@
       }
 
       setTheme(localStorage.getItem("bb-theme") || "dark");
-
       themeToggle?.addEventListener("click", () => {
-        const isLight = document.body.classList.contains("light");
-        setTheme(isLight ? "dark" : "light");
+        setTheme(document.body.classList.contains("light") ? "dark" : "light");
       });
 
+      // ── Scroll reveal ──
       const reveals = document.querySelectorAll(".reveal");
       const revealOnScroll = () => {
         const trigger = window.innerHeight * 0.92;
         reveals.forEach((el) => {
-          if (el.getBoundingClientRect().top < trigger) {
+          if (el.getBoundingClientRect().top < trigger)
             el.classList.add("active");
-          }
         });
       };
-
-      window.addEventListener("scroll", revealOnScroll);
+      window.addEventListener("scroll", revealOnScroll, { passive: true });
       window.addEventListener("load", revealOnScroll);
+
+      // ── Mobile dock: active state (with click-lock fix) ──
+      const dockLinks = document.querySelectorAll(".dock-link");
+      const sections = [
+        "summary",
+        "experience",
+        "projects",
+        "education",
+        "contact",
+      ]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+
+      let manualClick = false;
+      let manualClickTimeout = null;
+
+      function setActiveDockLink() {
+        if (manualClick) return;
+        let current = "summary";
+        const offset = window.innerHeight * 0.35;
+        sections.forEach((s) => {
+          if (s.getBoundingClientRect().top <= offset) current = s.id;
+        });
+        dockLinks.forEach((link) => {
+          const active = link.getAttribute("data-target") === current;
+          link.classList.toggle("active", active);
+          link.setAttribute("aria-current", active ? "page" : "false");
+        });
+      }
+
+      window.addEventListener("scroll", setActiveDockLink, { passive: true });
+      window.addEventListener("load", setActiveDockLink);
+
+      dockLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          dockLinks.forEach((item) => {
+            item.classList.remove("active");
+            item.setAttribute("aria-current", "false");
+          });
+          link.classList.add("active");
+          link.setAttribute("aria-current", "page");
+
+          // Lock scroll handler during smooth-scroll animation
+          manualClick = true;
+          clearTimeout(manualClickTimeout);
+          manualClickTimeout = setTimeout(() => {
+            manualClick = false;
+          }, 800);
+        });
+      });
     </script>
   </body>
 </html>
